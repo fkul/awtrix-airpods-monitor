@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun --watch ./src/index.ts",
-    "build": "bun build ./src/index.ts --compile --outfile ./bin/awtrix-airpods-monitor"
+    "build": "cp ./config.json ./bin/config.json && bun build ./src/index.ts --compile --outfile ./bin/awtrix-airpods-monitor"
   },
   "devDependencies": {
     "@types/bun": "latest"
