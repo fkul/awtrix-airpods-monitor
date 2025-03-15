@@ -7,6 +7,7 @@ import { BluetoothLive } from "./services/BluetoothService";
 
 import { initialState, StateService } from "./services/StateService";
 import { monitor } from "./monitor";
+import { AwtrixApiLive } from "./services/AwtrixApiService";
 
 const program = pipe(
   Effect.log("Starting AWTRIX AirPods monitor..."),
@@ -19,6 +20,7 @@ const program = pipe(
   //   console.log("just sum erorr");
   //   return Effect.succeed("OK!");
   // }),
+  Effect.provide(AwtrixApiLive),
   Effect.provide(BluetoothLive),
   Effect.provide(ConfigLayer),
   Effect.provide(BunContext.layer),

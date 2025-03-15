@@ -1,4 +1,5 @@
 {
   "airPodsAddress": "",
+  "awtrixApiBaseUrl": "",
   "updateIntervalMs": 5000
 }

@@ -5,6 +5,7 @@ const CONFIG_FILE_NAME = "config.json";
 
 export const AppConfig = Config.all({
   airPodsAddress: Config.string("airPodsAddress"),
+  awtrixApiBaseUrl: Config.string("awtrixApiBaseUrl"),
   updateIntervalMs: Config.integer("updateIntervalMs"),
 });
 
