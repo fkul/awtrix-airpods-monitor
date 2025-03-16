@@ -10,16 +10,15 @@ import { monitor } from "./monitor";
 import { AwtrixApiLive } from "./services/AwtrixApiService";
 
 const program = pipe(
-  Effect.log("Starting AWTRIX AirPods monitor..."),
+  Effect.log("Starting AWTRIX AirPods Monitor..."),
   Effect.andThen(() =>
     Effect.flatMap(AppConfig, (config) =>
       Effect.repeat(monitor, Schedule.spaced(config.updateIntervalMs))
     )
   ),
-  // Effect.catchAll((err) => {
-  //   console.log("just sum erorr");
-  //   return Effect.succeed("OK!");
-  // }),
+  Effect.catchAll((err) =>
+    Effect.logError(`Unhandled error caught: ${String(err)}`)
+  ),
   Effect.provide(AwtrixApiLive),
   Effect.provide(BluetoothLive),
   Effect.provide(ConfigLayer),

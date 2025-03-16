@@ -4,6 +4,7 @@ import { AppConfig } from "../../config";
 import { createHttpClient, type HttpClientError } from "../../utils/httpClient";
 import {
   StatsResponseSchema,
+  type PageProps,
   type StatsResponse,
 } from "./AwtrixApiService.types";
 
@@ -11,6 +12,21 @@ export class AwtrixApiService extends Context.Tag("AwtrixApiService")<
   AwtrixApiService,
   {
     readonly getStats: () => Effect.Effect<StatsResponse, HttpClientError>;
+
+    readonly postNotify: (
+      props: PageProps
+    ) => Effect.Effect<void, HttpClientError>;
+
+    readonly postCustomApp: (
+      name: string,
+      props: PageProps
+    ) => Effect.Effect<void, HttpClientError>;
+
+    readonly deleteCustomApp: (
+      name: string
+    ) => Effect.Effect<void, HttpClientError>;
+
+    readonly switchApp: (name: string) => Effect.Effect<void, HttpClientError>;
   }
 >() {}
 
@@ -20,11 +36,17 @@ export const AwtrixApiLive = Layer.effect(
     const config = yield* AppConfig;
     const client = createHttpClient(config.awtrixApiBaseUrl);
 
-    const getStats = () =>
-      client.get("/stats", { schema: StatsResponseSchema });
-
     return {
-      getStats,
+      getStats: () => client.get("/stats", { schema: StatsResponseSchema }),
+
+      postNotify: (props) => client.post("/notify", props),
+
+      postCustomApp: (name, props) =>
+        client.post(`/custom?name=${name}`, props),
+
+      deleteCustomApp: (name) => client.post(`/custom?name=${name}`),
+
+      switchApp: (name) => client.post("/switch", { name }),
     };
   })
 );

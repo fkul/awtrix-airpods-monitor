@@ -1,8 +1,8 @@
 import { Context, Option, Ref } from "effect";
-import type { BluetoothDevice } from "../../types";
+import type { AirPods } from "../../types";
 
 interface State {
-  readonly airPods: Option.Option<BluetoothDevice>;
+  readonly airPods: Option.Option<AirPods>;
 }
 
 export class StateService extends Context.Tag("StateService")<

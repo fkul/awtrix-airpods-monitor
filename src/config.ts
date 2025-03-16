@@ -4,9 +4,12 @@ import { Config, ConfigProvider, Effect, Layer, pipe } from "effect";
 const CONFIG_FILE_NAME = "config.json";
 
 export const AppConfig = Config.all({
-  airPodsAddress: Config.string("airPodsAddress"),
+  appName: Config.string("appName"),
+  airPodsName: Config.string("airPodsName"),
   awtrixApiBaseUrl: Config.string("awtrixApiBaseUrl"),
   updateIntervalMs: Config.integer("updateIntervalMs"),
+  icon: Config.number("icon"),
+  duration: Config.number("duration"),
 });
 
 export const ConfigLayer = pipe(

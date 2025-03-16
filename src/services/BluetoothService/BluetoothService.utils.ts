@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Array, Effect } from "effect";
 import type { BluetoothDevice } from "../../types";
 import { parse } from "yaml";
 
@@ -47,3 +47,11 @@ export const parseBluetoothDevicesStdOut = (
       ),
     ];
   });
+
+export const mergeDevices = Array.reduce<
+  BluetoothDevice | null,
+  BluetoothDevice
+>(null, (acc, device) => ({
+  ...acc,
+  ...device,
+}));

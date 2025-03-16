@@ -21,17 +21,17 @@ interface HttpClient {
   ) => Effect.Effect<T, HttpClientError>;
   post: <T = void, D = unknown>(
     url: string,
-    data: D,
+    data?: D,
     config?: RequestConfig<T>
   ) => Effect.Effect<T, HttpClientError>;
   put: <T = void, D = unknown>(
     url: string,
-    data: D,
+    data?: D,
     config?: RequestConfig<T>
   ) => Effect.Effect<T, HttpClientError>;
   patch: <T = void, D = unknown>(
     url: string,
-    data: D,
+    data?: D,
     config?: RequestConfig<T>
   ) => Effect.Effect<T, HttpClientError>;
   delete: <T = void>(

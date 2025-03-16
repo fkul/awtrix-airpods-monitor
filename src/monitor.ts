@@ -1,12 +1,13 @@
-import { Data, Effect, Equal, Match, Option, Ref } from "effect";
+import { Data, Effect, Equal, Match, Option, Ref, Schema } from "effect";
 
 import { AppConfig } from "./config";
 
 import { BluetoothService } from "./services/BluetoothService";
-import type { BluetoothDevice } from "./types";
+import { AirPodsSchema, type AirPods } from "./types";
 import { StateService } from "./services/StateService";
+import { onConnected, onDisconnected, onUpdated } from "./events";
 
-const areEqual = Option.getEquivalence<BluetoothDevice>((a, b) =>
+const areEqual = Option.getEquivalence<AirPods>((a, b) =>
   Equal.equals(Data.struct(a), Data.struct(b))
 );
 
@@ -16,30 +17,42 @@ export const monitor = Effect.gen(function* () {
   const config = yield* AppConfig;
   const state = yield* stateRef;
 
-  const airPods = yield* bluetoothService.getBluetoothDeviceByAddress(
-    config.airPodsAddress
-  );
+  const airPods = (yield* bluetoothService.getBluetoothDeviceByName(
+    config.airPodsName
+  )).pipe(Option.map(Schema.decodeUnknownSync(AirPodsSchema)));
 
   if (areEqual(airPods, state.airPods)) {
     return;
   }
 
-  Match.value({ prev: state.airPods, curr: airPods }).pipe(
+  yield* Match.value({ prev: state.airPods, curr: airPods }).pipe(
+    // Connected
     Match.when(
       ({ prev, curr }) =>
         (Option.isNone(prev) || !prev.value.isConnected) &&
         Option.isSome(curr) &&
         curr.value.isConnected,
-      ({ curr }) => console.log(Option.getOrThrow(curr))
+      ({ curr }) => onConnected(Option.getOrThrow(curr))
     ),
+    // Disconnected
     Match.when(
       ({ prev, curr }) =>
         Option.isSome(prev) &&
         prev.value.isConnected &&
         (Option.isNone(curr) || !curr.value.isConnected),
-      () => console.log("Disconnected!")
+      ({ curr }) => onDisconnected(Option.getOrThrow(curr))
     ),
-    Match.orElse(() => console.log("Unhandled change!"))
+    // Updated
+    Match.when(
+      ({ prev, curr }) =>
+        Option.isSome(prev) &&
+        prev.value.isConnected &&
+        Option.isSome(curr) &&
+        curr.value.isConnected,
+      ({ curr }) => onUpdated(Option.getOrThrow(curr))
+    ),
+    // Other state change
+    Match.orElse(() => Effect.succeed(Option.getOrNull(airPods)))
   );
 
   yield* Ref.set(stateRef, { airPods });

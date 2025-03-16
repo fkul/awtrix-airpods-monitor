@@ -1,5 +1,8 @@
 {
-  "airPodsAddress": "",
+  "appName": "AirPodsMonitor",
+  "airPodsName": "",
   "awtrixApiBaseUrl": "",
-  "updateIntervalMs": 5000
+  "updateIntervalMs": 5000,
+  "icon": 66076,
+  "duration": 3
 }

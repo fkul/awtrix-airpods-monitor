@@ -1,7 +1,10 @@
 import { Array, Context, Effect, Layer, Option, pipe } from "effect";
 import type { BluetoothDevice } from "../../types";
 import { Command, CommandExecutor } from "@effect/platform";
-import { parseBluetoothDevicesStdOut } from "./BluetoothService.utils";
+import {
+  mergeDevices,
+  parseBluetoothDevicesStdOut,
+} from "./BluetoothService.utils";
 import type { PlatformError } from "@effect/platform/Error";
 
 export class BluetoothService extends Context.Tag("BluetoothService")<
@@ -11,7 +14,12 @@ export class BluetoothService extends Context.Tag("BluetoothService")<
       BluetoothDevice[],
       PlatformError
     >;
+
     readonly getBluetoothDeviceByAddress: (
+      address: string
+    ) => Effect.Effect<Option.Option<BluetoothDevice>, PlatformError>;
+
+    readonly getBluetoothDeviceByName: (
       address: string
     ) => Effect.Effect<Option.Option<BluetoothDevice>, PlatformError>;
   }
@@ -35,19 +43,20 @@ export const BluetoothLive = Layer.effect(
 
     return {
       getBluetoothDevices,
+
       getBluetoothDeviceByAddress: (address: string) =>
         pipe(
           getBluetoothDevices(),
           Effect.map(Array.filter((device) => device["Address"] === address)),
-          Effect.map(
-            Array.reduce<BluetoothDevice | null, BluetoothDevice>(
-              null,
-              (acc, device) => ({
-                ...acc,
-                ...device,
-              })
-            )
-          ),
+          Effect.map(mergeDevices),
+          Effect.map(Option.fromNullable)
+        ),
+
+      getBluetoothDeviceByName: (name: string) =>
+        pipe(
+          getBluetoothDevices(),
+          Effect.map(Array.filter((device) => device.name === name)),
+          Effect.map(mergeDevices),
           Effect.map(Option.fromNullable)
         ),
     };
