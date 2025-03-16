@@ -30,6 +30,9 @@ importers:
       '@types/bun':
         specifier: latest
         version: 1.2.5
+      prettier:
+        specifier: ^3.5.3
+        version: 3.5.3
 
 packages:
 
@@ -286,6 +289,11 @@ packages:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
 
+  prettier@3.5.3:
+    resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
+    engines: {node: '>=14'}
+    hasBin: true
+
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
 
@@ -540,6 +548,8 @@ snapshots:
   node-addon-api@7.1.1: {}
 
   picomatch@2.3.1: {}
+
+  prettier@3.5.3: {}
 
   proxy-from-env@1.1.0: {}
 

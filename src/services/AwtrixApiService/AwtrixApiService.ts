@@ -1,52 +1,52 @@
-import { Context, Effect, Layer } from "effect";
+import { Context, Effect, Layer } from 'effect'
 
-import { AppConfig } from "../../config";
-import { createHttpClient, type HttpClientError } from "../../utils/httpClient";
+import { AppConfig } from '../../config'
+import { createHttpClient, type HttpClientError } from '../../utils/httpClient'
 import {
   StatsResponseSchema,
   type PageProps,
   type StatsResponse,
-} from "./AwtrixApiService.types";
+} from './AwtrixApiService.types'
 
-export class AwtrixApiService extends Context.Tag("AwtrixApiService")<
+export class AwtrixApiService extends Context.Tag('AwtrixApiService')<
   AwtrixApiService,
   {
-    readonly getStats: () => Effect.Effect<StatsResponse, HttpClientError>;
+    readonly getStats: () => Effect.Effect<StatsResponse, HttpClientError>
 
     readonly postNotify: (
-      props: PageProps
-    ) => Effect.Effect<void, HttpClientError>;
+      props: PageProps,
+    ) => Effect.Effect<void, HttpClientError>
 
     readonly postCustomApp: (
       name: string,
-      props: PageProps
-    ) => Effect.Effect<void, HttpClientError>;
+      props: PageProps,
+    ) => Effect.Effect<void, HttpClientError>
 
     readonly deleteCustomApp: (
-      name: string
-    ) => Effect.Effect<void, HttpClientError>;
+      name: string,
+    ) => Effect.Effect<void, HttpClientError>
 
-    readonly switchApp: (name: string) => Effect.Effect<void, HttpClientError>;
+    readonly switchApp: (name: string) => Effect.Effect<void, HttpClientError>
   }
 >() {}
 
 export const AwtrixApiLive = Layer.effect(
   AwtrixApiService,
   Effect.gen(function* () {
-    const config = yield* AppConfig;
-    const client = createHttpClient(config.awtrixApiBaseUrl);
+    const config = yield* AppConfig
+    const client = createHttpClient(config.awtrixApiBaseUrl)
 
     return {
-      getStats: () => client.get("/stats", { schema: StatsResponseSchema }),
+      getStats: () => client.get('/stats', { schema: StatsResponseSchema }),
 
-      postNotify: (props) => client.post("/notify", props),
+      postNotify: props => client.post('/notify', props),
 
       postCustomApp: (name, props) =>
         client.post(`/custom?name=${name}`, props),
 
-      deleteCustomApp: (name) => client.post(`/custom?name=${name}`),
+      deleteCustomApp: name => client.post(`/custom?name=${name}`),
 
-      switchApp: (name) => client.post("/switch", { name }),
-    };
-  })
-);
+      switchApp: name => client.post('/switch', { name }),
+    }
+  }),
+)

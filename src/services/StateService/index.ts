@@ -1,1 +1,1 @@
-export { initialState, StateService } from "./StateService";
+export { initialState, StateService } from './StateService'

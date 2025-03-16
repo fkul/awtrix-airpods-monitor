@@ -1,28 +1,28 @@
-import { Data, Effect, Equal, Match, Option, Ref, Schema } from "effect";
+import { Data, Effect, Equal, Match, Option, Ref, Schema } from 'effect'
 
-import { AppConfig } from "./config";
+import { AppConfig } from './config'
 
-import { BluetoothService } from "./services/BluetoothService";
-import { AirPodsSchema, type AirPods } from "./types";
-import { StateService } from "./services/StateService";
-import { onConnected, onDisconnected, onUpdated } from "./events";
+import { BluetoothService } from './services/BluetoothService'
+import { AirPodsSchema, type AirPods } from './types'
+import { StateService } from './services/StateService'
+import { onConnected, onDisconnected, onUpdated } from './events'
 
 const areEqual = Option.getEquivalence<AirPods>((a, b) =>
-  Equal.equals(Data.struct(a), Data.struct(b))
-);
+  Equal.equals(Data.struct(a), Data.struct(b)),
+)
 
 export const monitor = Effect.gen(function* () {
-  const stateRef = yield* StateService;
-  const bluetoothService = yield* BluetoothService;
-  const config = yield* AppConfig;
-  const state = yield* stateRef;
+  const stateRef = yield* StateService
+  const bluetoothService = yield* BluetoothService
+  const config = yield* AppConfig
+  const state = yield* stateRef
 
   const airPods = (yield* bluetoothService.getBluetoothDeviceByName(
-    config.airPodsName
-  )).pipe(Option.map(Schema.decodeUnknownSync(AirPodsSchema)));
+    config.airPodsName,
+  )).pipe(Option.map(Schema.decodeUnknownSync(AirPodsSchema)))
 
   if (areEqual(airPods, state.airPods)) {
-    return;
+    return
   }
 
   yield* Match.value({ prev: state.airPods, curr: airPods }).pipe(
@@ -32,7 +32,7 @@ export const monitor = Effect.gen(function* () {
         (Option.isNone(prev) || !prev.value.isConnected) &&
         Option.isSome(curr) &&
         curr.value.isConnected,
-      ({ curr }) => onConnected(Option.getOrThrow(curr))
+      ({ curr }) => onConnected(Option.getOrThrow(curr)),
     ),
     // Disconnected
     Match.when(
@@ -40,7 +40,7 @@ export const monitor = Effect.gen(function* () {
         Option.isSome(prev) &&
         prev.value.isConnected &&
         (Option.isNone(curr) || !curr.value.isConnected),
-      ({ curr }) => onDisconnected(Option.getOrThrow(curr))
+      ({ curr }) => onDisconnected(Option.getOrThrow(curr)),
     ),
     // Updated
     Match.when(
@@ -49,11 +49,11 @@ export const monitor = Effect.gen(function* () {
         prev.value.isConnected &&
         Option.isSome(curr) &&
         curr.value.isConnected,
-      ({ curr }) => onUpdated(Option.getOrThrow(curr))
+      ({ curr }) => onUpdated(Option.getOrThrow(curr)),
     ),
     // Other state change
-    Match.orElse(() => Effect.succeed(Option.getOrNull(airPods)))
-  );
+    Match.orElse(() => Effect.succeed(Option.getOrNull(airPods))),
+  )
 
-  yield* Ref.set(stateRef, { airPods });
-});
+  yield* Ref.set(stateRef, { airPods })
+})

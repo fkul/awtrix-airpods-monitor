@@ -1,45 +1,45 @@
-import { Array, Context, Effect, Layer, Option, pipe } from "effect";
-import type { BluetoothDevice } from "../../types";
-import { Command, CommandExecutor } from "@effect/platform";
+import { Array, Context, Effect, Layer, Option, pipe } from 'effect'
+import type { BluetoothDevice } from '../../types'
+import { Command, CommandExecutor } from '@effect/platform'
 import {
   mergeDevices,
   parseBluetoothDevicesStdOut,
-} from "./BluetoothService.utils";
-import type { PlatformError } from "@effect/platform/Error";
+} from './BluetoothService.utils'
+import type { PlatformError } from '@effect/platform/Error'
 
-export class BluetoothService extends Context.Tag("BluetoothService")<
+export class BluetoothService extends Context.Tag('BluetoothService')<
   BluetoothService,
   {
     readonly getBluetoothDevices: () => Effect.Effect<
       BluetoothDevice[],
       PlatformError
-    >;
+    >
 
     readonly getBluetoothDeviceByAddress: (
-      address: string
-    ) => Effect.Effect<Option.Option<BluetoothDevice>, PlatformError>;
+      address: string,
+    ) => Effect.Effect<Option.Option<BluetoothDevice>, PlatformError>
 
     readonly getBluetoothDeviceByName: (
-      address: string
-    ) => Effect.Effect<Option.Option<BluetoothDevice>, PlatformError>;
+      address: string,
+    ) => Effect.Effect<Option.Option<BluetoothDevice>, PlatformError>
   }
 >() {}
 
 export const BluetoothLive = Layer.effect(
   BluetoothService,
   Effect.gen(function* () {
-    const commandExecutor = yield* CommandExecutor.CommandExecutor;
+    const commandExecutor = yield* CommandExecutor.CommandExecutor
 
     const getBluetoothDevices = () =>
       Effect.provideService(
         pipe(
-          Command.make("system_profiler", "SPBluetoothDataType"),
+          Command.make('system_profiler', 'SPBluetoothDataType'),
           Command.string,
-          Effect.flatMap(parseBluetoothDevicesStdOut)
+          Effect.flatMap(parseBluetoothDevicesStdOut),
         ),
         CommandExecutor.CommandExecutor,
-        commandExecutor
-      );
+        commandExecutor,
+      )
 
     return {
       getBluetoothDevices,
@@ -47,18 +47,18 @@ export const BluetoothLive = Layer.effect(
       getBluetoothDeviceByAddress: (address: string) =>
         pipe(
           getBluetoothDevices(),
-          Effect.map(Array.filter((device) => device["Address"] === address)),
+          Effect.map(Array.filter(device => device['Address'] === address)),
           Effect.map(mergeDevices),
-          Effect.map(Option.fromNullable)
+          Effect.map(Option.fromNullable),
         ),
 
       getBluetoothDeviceByName: (name: string) =>
         pipe(
           getBluetoothDevices(),
-          Effect.map(Array.filter((device) => device.name === name)),
+          Effect.map(Array.filter(device => device.name === name)),
           Effect.map(mergeDevices),
-          Effect.map(Option.fromNullable)
+          Effect.map(Option.fromNullable),
         ),
-    };
-  })
-);
+    }
+  }),
+)

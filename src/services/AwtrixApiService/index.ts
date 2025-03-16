@@ -1,1 +1,1 @@
-export { AwtrixApiLive, AwtrixApiService } from "./AwtrixApiService";
+export { AwtrixApiLive, AwtrixApiService } from './AwtrixApiService'

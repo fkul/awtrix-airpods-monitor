@@ -1,1 +1,1 @@
-export { BluetoothLive, BluetoothService } from "./BluetoothService";
+export { BluetoothLive, BluetoothService } from './BluetoothService'
