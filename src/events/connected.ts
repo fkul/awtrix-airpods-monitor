@@ -10,7 +10,7 @@ export const onConnected = (airPods: AirPods) =>
     Effect.tap(() => Effect.log(`AirPods connected [${airPods.name}]`)),
     Effect.andThen((config) =>
       Effect.all([
-        notifyConnected(airPods),
+        notifyConnected(config, airPods),
         setApp(config, airPods),
         switchApp(config.appName),
       ])

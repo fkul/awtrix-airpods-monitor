@@ -11,7 +11,11 @@ const COLORS = {
 };
 
 const getText = (label: string, level: Option.Option<number>): string =>
-  `${label}: ${Option.getOrElse(level, constant("n/a"))}%`;
+  `${label}: ${pipe(
+    level,
+    Option.map((val) => `${val}%`),
+    Option.getOrElse(constant("n/a"))
+  )}`;
 
 const getProgressColor = (level: Option.Option<number>): string | undefined =>
   pipe(

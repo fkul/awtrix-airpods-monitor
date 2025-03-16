@@ -1,10 +1,14 @@
 import { Effect } from "effect";
 import { AwtrixApiService } from "../services/AwtrixApiService";
-import type { AirPods } from "../types";
+import type { AirPods, AppConfig } from "../types";
 
-export const notifyConnected = (airPods: AirPods) =>
+export const notifyConnected = ({ icon }: AppConfig, airPods: AirPods) =>
   AwtrixApiService.pipe(
     Effect.andThen((api) =>
-      api.postNotify({ text: `Connected: ${airPods.name}` })
+      api.postNotify({
+        icon: String(icon),
+        repeat: 1,
+        text: `Connected: ${airPods.name}`,
+      })
     )
   );
