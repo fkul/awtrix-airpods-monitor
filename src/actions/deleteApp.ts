@@ -1,5 +1,6 @@
 import { Effect } from 'effect'
-import { AwtrixApiService } from '../services/AwtrixApiService'
+
+import { AwtrixApiService } from '~/services/AwtrixApiService'
 
 export const deleteApp = (appName: string) =>
   AwtrixApiService.pipe(

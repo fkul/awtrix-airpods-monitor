@@ -1,11 +1,10 @@
 import { Data, Effect, Equal, Match, Option, Ref, Schema } from 'effect'
 
 import { AppConfig } from './config'
-
-import { BluetoothService } from './services/BluetoothService'
-import { AirPodsSchema, type AirPods } from './types'
-import { StateService } from './services/StateService'
 import { onConnected, onDisconnected, onUpdated } from './events'
+import { BluetoothService } from './services/BluetoothService'
+import { StateService } from './services/StateService'
+import { AirPodsSchema, type AirPods } from './types'
 
 const areEqual = Option.getEquivalence<AirPods>((a, b) =>
   Equal.equals(Data.struct(a), Data.struct(b)),

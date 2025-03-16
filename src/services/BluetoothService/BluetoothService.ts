@@ -1,11 +1,13 @@
-import { Array, Context, Effect, Layer, Option, pipe } from 'effect'
-import type { BluetoothDevice } from '../../types'
 import { Command, CommandExecutor } from '@effect/platform'
+import type { PlatformError } from '@effect/platform/Error'
+import { Array, Context, Effect, Layer, Option, pipe } from 'effect'
+
+import type { BluetoothDevice } from '~/types'
+
 import {
   mergeDevices,
   parseBluetoothDevicesStdOut,
 } from './BluetoothService.utils'
-import type { PlatformError } from '@effect/platform/Error'
 
 export class BluetoothService extends Context.Tag('BluetoothService')<
   BluetoothService,

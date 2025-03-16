@@ -1,13 +1,11 @@
+import { BunContext } from '@effect/platform-bun'
 import { Effect, pipe, Schedule } from 'effect'
 
 import { AppConfig, ConfigLayer } from './config'
-
-import { BunContext } from '@effect/platform-bun'
-import { BluetoothLive } from './services/BluetoothService'
-
-import { initialState, StateService } from './services/StateService'
 import { monitor } from './monitor'
 import { AwtrixApiLive } from './services/AwtrixApiService'
+import { BluetoothLive } from './services/BluetoothService'
+import { initialState, StateService } from './services/StateService'
 
 const program = pipe(
   Effect.log('Starting AWTRIX AirPods Monitor...'),
@@ -26,4 +24,5 @@ const program = pipe(
   Effect.provideServiceEffect(StateService, initialState),
 )
 
+// eslint-disable-next-line no-console
 Effect.runPromise(program).catch(console.error)

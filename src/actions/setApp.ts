@@ -1,8 +1,8 @@
 import { Effect, Match, Option } from 'effect'
-import { AwtrixApiService } from '../services/AwtrixApiService'
-import type { PageProps } from '../services/AwtrixApiService/AwtrixApiService.types'
-import type { AirPods, AppConfig } from '../types'
 import { constant, pipe } from 'effect/Function'
+
+import { AwtrixApiService, type PageProps } from '~/services/AwtrixApiService'
+import type { AirPods, AppConfig } from '~/types'
 
 const COLORS = {
   red: 'ff0000',

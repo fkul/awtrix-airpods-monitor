@@ -1,9 +1,8 @@
 import { Effect } from 'effect'
-import type { AirPods } from '../types'
-import { AppConfig } from '../config'
-import { notifyConnected } from '../actions/notifyConnected'
-import { setApp } from '../actions/setApp'
-import { switchApp } from '../actions/switchApp'
+
+import { notifyConnected, setApp, switchApp } from '~/actions'
+import { AppConfig } from '~/config'
+import type { AirPods } from '~/types'
 
 export const onConnected = (airPods: AirPods) =>
   AppConfig.pipe(

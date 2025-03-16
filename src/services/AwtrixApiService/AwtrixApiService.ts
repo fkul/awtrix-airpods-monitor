@@ -1,7 +1,8 @@
 import { Context, Effect, Layer } from 'effect'
 
-import { AppConfig } from '../../config'
-import { createHttpClient, type HttpClientError } from '../../utils/httpClient'
+import { AppConfig } from '~/config'
+import { createHttpClient, type HttpClientError } from '~/utils'
+
 import {
   StatsResponseSchema,
   type PageProps,

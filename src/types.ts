@@ -1,4 +1,5 @@
 import { Config, Schema } from 'effect'
+
 import type { AppConfig } from './config'
 
 export type AppConfig = Config.Config.Success<typeof AppConfig>

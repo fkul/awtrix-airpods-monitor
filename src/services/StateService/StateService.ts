@@ -1,5 +1,6 @@
 import { Context, Option, Ref } from 'effect'
-import type { AirPods } from '../../types'
+
+import type { AirPods } from '~/types'
 
 interface State {
   readonly airPods: Option.Option<AirPods>

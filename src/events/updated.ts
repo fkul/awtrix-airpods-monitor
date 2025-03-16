@@ -1,7 +1,8 @@
 import { Effect, Option } from 'effect'
-import type { AirPods } from '../types'
-import { AppConfig } from '../config'
-import { setApp } from '../actions/setApp'
+
+import { setApp } from '~/actions'
+import { AppConfig } from '~/config'
+import type { AirPods } from '~/types'
 
 export const onUpdated = (airPods: AirPods) =>
   AppConfig.pipe(

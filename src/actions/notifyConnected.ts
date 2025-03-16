@@ -1,6 +1,7 @@
 import { Effect } from 'effect'
-import { AwtrixApiService } from '../services/AwtrixApiService'
-import type { AirPods, AppConfig } from '../types'
+
+import { AwtrixApiService } from '~/services/AwtrixApiService'
+import type { AirPods, AppConfig } from '~/types'
 
 export const notifyConnected = ({ icon }: AppConfig, airPods: AirPods) =>
   AwtrixApiService.pipe(

@@ -1,6 +1,7 @@
 import { Array, Effect } from 'effect'
-import type { BluetoothDevice } from '../../types'
 import { parse } from 'yaml'
+
+import type { BluetoothDevice } from '~/types'
 
 const prepareValidYaml = (input: string): Effect.Effect<string> =>
   Effect.sync(() => {
